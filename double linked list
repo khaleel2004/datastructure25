@@ -1,0 +1,157 @@
+#include<stdio.h>
+#include<conio.h>
+int posi=1;
+struct node
+{
+int element;
+struct node *next;
+struct node *pre;
+};
+typedef struct node *ptonode;
+typedef ptonode position;
+typedef position list;
+position find(int,list);
+position findPrevious(int,list);
+void insert(int,position);
+void delete1(int,list);
+position printlist(position);
+void printrev(position,position);
+void main()
+{
+int i,ele,ele1,data,ch,del;
+position head,p,r;
+head=(position)malloc(sizeof(struct node));
+head->next=NULL;
+head->pre=NULL;
+do
+{
+printf("Enter the operation u want to perform with the list\n");
+printf("\n1->find\n2->insert\n3->delete\n4->display\n5->displayreverse");
+scanf("%d",&ch);
+
+switch(ch)
+{
+case 1:
+printf("Enter the element u want to findout");
+scanf("%d",&ele);
+p=find(ele,head);
+if(p!=NULL)
+printf("element %d is present in the list at %d position",p->element,posi);
+else
+printf("element not present in the list");
+break;
+case 2:
+printf("Enter the data u want to insert:");
+scanf("%d",&data);
+if(head->next==NULL)
+{
+insert(data,head);
+}
+else
+{
+printf("Enter the element after which data to be inserted");
+scanf("%d",&ele1);
+p=find(ele1,head);
+if(p==NULL)
+printf("Element not in the list");
+else
+insert(data,p);
+}
+break;
+case 3:
+printf("Enter the element u want to delete");
+scanf("%d",&del);
+delete1(del,head);
+printf("the element %d is deleted from the list",del);
+break;
+case 4:
+printf("HEADER-->");
+r=printlist(head);
+printf("NULL");
+break;
+case 5:
+printf("NULL");
+printrev(r,head);
+printf("<-->Header");
+}
+printf("\n\ndo u want to perform any operation again \n enter 1->yes \n 2->no:");
+scanf("%d",&ch);
+}while(ch==1);
+getch();
+}
+position find(int x,position p)
+{
+position k;
+k=p->next;
+while(k!=NULL && k->element!=x)
+{
+k=k->next;
+posi++;
+}
+return k;
+}
+void insert(int y,position p)
+{
+position tempcell;
+tempcell=(position)malloc(sizeof(struct node));
+tempcell->element=y;
+tempcell->next=NULL;
+tempcell->pre=NULL;
+if(p->next==NULL)
+{
+p->next=tempcell;
+tempcell->pre=p;
+}
+else
+{
+
+tempcell->next=p->next;
+tempcell->pre=p;
+p->next->pre=tempcell;
+p->next=tempcell;
+}
+}
+void delete1(int y,list h)
+{
+position p,p1;
+p=find(y,h);
+if(p->next==NULL)
+{
+p->pre->next=NULL;
+free(p);
+}
+else
+{
+p->pre->next=p->next;
+p->next->pre=p->pre;
+free(p);
+
+}
+}
+/*position findPrevious(int y,list h)
+{
+position p;
+p=h;
+while(p->next!=NULL && p->next->element!=y)
+p=p->next;
+return p;
+}*/
+position printlist(position n)
+{
+position l,m;
+for(l=n->next;l!=NULL;l=l->next)
+{
+printf("%d<-->",l->element);
+m=l;
+}
+return(m);
+}
+void printrev(position l,position n)
+{
+position m;
+for(m=l;m!=n;m=m->pre)
+{
+printf("<-->%d",m->element);
+}
+
+}
